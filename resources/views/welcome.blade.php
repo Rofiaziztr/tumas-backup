@@ -1,9 +1,7 @@
-@extends('layouts.main')
-
-@section('main-content')
+<x-layout :title="$title">
     <div class="container">
-        <h1 class="m-3">Welcome to Tumas</h1>
-        <p class="lead">This is a simple task management application.</p>
-        <p>To get started, you can create a new task or view existing tasks.</p>
+        <h1 class="mt-3">Selamat datang di halaman home</h1>
+        <p class="lead">Ini adalah halaman utama aplikasi Tumas.</p>
+        <p>Anda dapat mengelola tugas-tugas Anda di sini.</p>
     </div>
-@endsection
+</x-layout>

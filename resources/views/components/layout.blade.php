@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Tumas</title>
+    <title>{{ $title }}</title>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
     </script>
@@ -14,18 +14,31 @@
 </head>
 
 <body>
-    @include('layouts.navbar')
+    <x-navbar />
 
-    <div class="container">
-        @yield('main-content')
-    </div>
+    {{-- <x-header :title="$title" /> --}}
 
-    <div class="container">
-        @yield('second-content')
-    </div>
+    <main>
+        <div class="container">
+            {{ $slot }}
+        </div>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
+    </script>
+
+    <x-footer />
+    <script>
+        // Initialization for ES Users
+        import {
+            Input,
+            initMDB
+        } from "mdb-ui-kit";
+
+        initMDB({
+            Input
+        });
     </script>
 </body>
 
