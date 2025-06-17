@@ -12,11 +12,11 @@ Route::get('/about', function () {
 });
 
 Route::get('register', function () {
-    return view('auth.register');
+    return view('auth.register', ['title' => 'register']);
 })->name('register');
 
 Route::get('login', function () {
-    return view('auth.login');
+    return view('auth.login', ['title' => 'login']);
 })->name('login');
 
 Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');

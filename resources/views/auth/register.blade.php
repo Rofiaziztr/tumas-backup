@@ -1,4 +1,4 @@
-<x-auth.layout>
+<x-auth.layout :title="$title">
     <div class="auth-header">
         <h2>Create Your Account</h2>
     </div>

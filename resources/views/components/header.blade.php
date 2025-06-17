@@ -9,13 +9,9 @@
 
         <x-navbar />
 
-        <div class="header-actions d-flex align-items-center">
-            <a href="{{ route('register') }}">
-                <button class="btn btn-secondary me-md-2" type="button">Sign Up</button>
-            </a>
-            <a href="{{ route('login') }}">
-                <button class="btn btn-secondary" type="button">Sign In</button>
-            </a>
+        <div class="header-actions d-none">
+            <a href="{{ route('register') }}" class="btn btn-secondary me-2">Sign Up</a>
+            <a href="{{ route('login') }}" class="btn btn-secondary">Sign In</a>
         </div>
 
     </div>

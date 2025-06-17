@@ -2131,37 +2131,8 @@ section,
 }
 
 .header-actions .btn {
+    width: 100%; /* Tombol memenuhi container */
     padding: 0.5rem 1rem; /* Padding yang lebih compact */
     font-size: 0.875rem; /* Ukuran font lebih kecil */
     white-space: nowrap; /* Mencegah text wrapping */
-}
-
-/* Media Query untuk Mobile */
-@media (max-width: 768px) {
-    .header-actions {
-        flex-direction: column; /* Susun tombol vertikal */
-        width: 100%; /* Lebar penuh */
-        margin-top: 0.5rem;
-    }
-
-    .header-actions .btn {
-        width: 100%; /* Tombol memenuhi container */
-        margin: 0.25rem 0; /* Jarak antar tombol */
-        padding: 0.5rem; /* Padding mobile */
-    }
-
-    .header-actions a {
-        width: 100%; /* Link memenuhi container */
-    }
-}
-
-/* Tambahan untuk tampilan header mobile */
-@media (max-width: 992px) {
-    .header {
-        padding: 0.5rem 0;
-    }
-
-    .header-actions {
-        margin-left: auto; /* Geser ke kanan */
-    }
 }
