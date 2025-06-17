@@ -11,8 +11,12 @@ Route::get('/about', function () {
     return view('about', ['title' => 'about']);
 });
 
-Route::get('/register', function () {
-    return view('register', ['title' => 'register']);
-});
+Route::get('register', function () {
+    return view('auth.register');
+})->name('register');
+
+Route::get('login', function () {
+    return view('auth.login');
+})->name('login');
 
 Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
