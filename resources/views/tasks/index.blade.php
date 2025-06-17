@@ -1,36 +1,37 @@
 <x-layout :title="$title">
     <div class="container">
-        <h1 class="mt-3">Tasks</h1>
-        <p class="lead">Here you can manage your tasks.</p>
-        <p>To get started, you can create a new task or view existing tasks.</p>
-        {{-- <div class="mb-3">
-            <a href="{{ route('tasks.create') }}" class="btn btn-primary">Create New Task</a>
-        </div> --}}
-        <table class="table table-striped">
+        <h1>Data Tugas</h1>
+
+        <a href="{{ route('task.create') }}" class="btn btn-primary">Tambah Data</a>
+
+        <table class="table">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>No</th>
+                    <th>Judul</th>
+                    <th>Deskripsi</th>
+                    <th>status</th>
+                    <th>dateline</th>
                 </tr>
+
             </thead>
+
             <tbody>
                 @foreach ($tasks as $task)
                     <tr>
-                        <td>{{ $task->id }}</td>
-                        <td>{{ $task->title }}</td>
-                        <td>{{ $task->description }}</td>
-                        <td>{{ $task->status }}</td>
-                        {{-- <td>
-                            <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning">Edit</a>
-                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
+                        <td>{{ $loop->iteration }}</td>
+                        <td>
+                            <a href="{{ route('task.show', $task->id) }}">{{ $task->code }}</a>
+                        </td>
+                        <td>{{ $task->name }}</td>
+                        <td class="d-flex">
+                            <a href="{{ route('task.edit', $task->id) }}" class="btn btn-warning btn-sm ms-2">Edit</a>
+                            <form action="{{ route('task.destroy', $task->id) }}" method="post">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <input type="submit" value="hapus" class="btn btn-danger btn-sm ms-2">
                             </form>
-                        </td> --}}
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

@@ -19,4 +19,6 @@ Route::get('login', function () {
     return view('auth.login', ['title' => 'login']);
 })->name('login');
 
-Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
+// Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
+
+Route::resource('task', TaskController::class);
