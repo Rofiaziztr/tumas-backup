@@ -26,7 +26,7 @@
                             {{ Auth::user()->name }}
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Profil</a></li>
+                            <li><a class="dropdown-item" href="{{ route('profile') }}">Profil</a></li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf

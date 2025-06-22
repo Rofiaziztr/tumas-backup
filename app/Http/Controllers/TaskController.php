@@ -73,6 +73,7 @@ class TaskController extends Controller
 
         $task = new Task($request->all());
         $task->user_id = Auth::id();
+        $task->deadline = $request->deadline;
         $task->save();
 
         return redirect()->route('dashboard')->with('success', 'Tugas berhasil ditambahkan!');
@@ -101,6 +102,7 @@ class TaskController extends Controller
             'status' => 'required|in:todo,in_progress,completed'
         ]);
 
+        $task->deadline = $request->deadline;
         $task->update($request->all());
         return redirect()->route('dashboard')->with('success', 'Tugas berhasil diperbarui!');
     }

@@ -35,7 +35,7 @@
                                 <tr>
                                     <td>{{ $task->title }}</td>
                                     <td>{{ $task->course }}</td>
-                                    <td>{{ $task->deadline->format('d M Y H:i') }}</td>
+                                    <td>{{ $task->deadline->setTimezone('Asia/Jakarta')->format('d M Y H:i') }} WIB</td>
                                     <td>
                                         @php
                                             $diff = $task->deadline->diff(now());

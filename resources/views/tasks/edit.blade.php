@@ -37,7 +37,8 @@
         <div class="mb-3">
             <label for="deadline" class="form-label">Deadline *</label>
             <input type="datetime-local" class="form-control" id="deadline" name="deadline"
-                value="{{ old('deadline', $task->deadline->format('Y-m-d\TH:i')) }}" required>
+                value="{{ old('deadline', isset($task) ? $task->deadline->setTimezone('Asia/Jakarta')->format('Y-m-d\TH:i') : '') }}"
+                required>
         </div>
         <div class="mb-3">
             <label for="priority" class="form-label">Prioritas *</label>

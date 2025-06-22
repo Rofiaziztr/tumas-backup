@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TaskController;
+
 
 Auth::routes(['verify' => false]);
 
@@ -16,4 +18,5 @@ Route::middleware(['auth'])->group(function () {
         'destroy'
     ]);
     Route::get('/reminders', [TaskController::class, 'showReminders'])->name('reminders');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
 });
