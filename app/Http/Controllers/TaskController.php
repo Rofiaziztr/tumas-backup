@@ -4,90 +4,114 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::all();
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
 
-        return view('tasks.index', compact('tasks'), ['title' => "Tugas"]);
+        $query = Task::where('user_id', Auth::id());
+
+        // Filter berdasarkan status
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        // Filter berdasarkan mata kuliah
+        if ($request->has('course') && $request->course != '') {
+            $query->where('course', 'like', '%' . $request->course . '%');
+        }
+
+        $tasks = $query->orderBy('deadline')->get();
+
+        // Ambil pengingat
+        $reminders = Task::where('user_id', Auth::id())
+            ->where('deadline', '<=', now()->addDays(3))
+            ->where('status', '!=', 'completed')
+            ->get();
+
+        // Hitung jumlah reminder untuk navbar
+        $reminderCount = Task::where('user_id', Auth::id())
+            ->where('deadline', '<=', now()->addDays(3))
+            ->where('status', '!=', 'completed')
+            ->count();
+
+        return view('dashboard', compact('tasks', 'reminders', 'reminderCount'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function showReminders()
+    {
+        $reminders = Task::where('user_id', Auth::id())
+            ->where('deadline', '<=', now()->addDays(3))
+            ->where('status', '!=', 'completed')
+            ->orderBy('deadline')
+            ->get();
+
+        $reminderCount = $reminders->count();
+
+        return view('reminders', compact('reminders', 'reminderCount'));
+    }
+
     public function create()
     {
-        return view('tasks.create', ['title' => "Tugas"]);
+        return view('tasks.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        try {
-            $task = new Task();
-            $task->title = $request->title;
-            $task->description = $request->description;
-            $task->status = $request->status;
-            $task->due_date = $request->due_date;
-            $task->save();
+        $request->validate([
+            'title' => 'required|max:255',
+            'course' => 'required|max:100',
+            'deadline' => 'required|date',
+            'priority' => 'required|in:low,medium,high',
+            'status' => 'required|in:todo,in_progress,completed'
+        ]);
 
-            return redirect()->route('task.index')->with('success', 'Data tugas baru tersimpan');
-        } catch (\Throwable $th) {
-            return redirect()->route('task.create')->with('error', $th->getMessage());
-        }
+        $task = new Task($request->all());
+        $task->user_id = Auth::id();
+        $task->save();
+
+        return redirect()->route('dashboard')->with('success', 'Tugas berhasil ditambahkan!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Task $task)
-    {
-        return view('tasks.show', compact('task'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Task $task)
     {
+        // Pastikan tugas milik user yang login
+        if ($task->user_id !== Auth::id()) {
+            abort(403);
+        }
         return view('tasks.edit', compact('task'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Task $task)
     {
-        try {
-            $task->title = $request->title;
-            $task->desription = $request->desription;
-            $task->status = $request->status;
-            $task->due_date = $request->due_date;
-            $task->save();
-
-            return redirect()->route('task.index')->with('success', 'Data tugas berhasil diubah');
-        } catch (\Throwable $th) {
-            return redirect()->route('task.edit', $task->id)->with('error', $th->getMessage());
+        if ($task->user_id !== Auth::id()) {
+            abort(403);
         }
+
+        $request->validate([
+            'title' => 'required|max:255',
+            'course' => 'required|max:100',
+            'deadline' => 'required|date',
+            'priority' => 'required|in:low,medium,high',
+            'status' => 'required|in:todo,in_progress,completed'
+        ]);
+
+        $task->update($request->all());
+        return redirect()->route('dashboard')->with('success', 'Tugas berhasil diperbarui!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Task $task)
     {
-        try {
-            $task->delete();
-            return redirect()->route('task.index')->with('successs', "Data fakultas berhasil dihapus");
-        } catch (\Throwable $th) {
-            return redirect()->route('task.index')->with('error', $th->getMessage());
+        if ($task->user_id !== Auth::id()) {
+            abort(403);
         }
+
+        $task->delete();
+        return redirect()->route('dashboard')->with('success', 'Tugas berhasil dihapus!');
     }
 }

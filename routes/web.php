@@ -1,24 +1,19 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 
-Route::get('/', function () {
-    return view('welcome', ['title' => 'welcome']);
+Auth::routes(['verify' => false]);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [TaskController::class, 'index'])->name('dashboard');
+    Route::resource('tasks', TaskController::class)->only([
+        'create',
+        'store',
+        'edit',
+        'update',
+        'destroy'
+    ]);
+    Route::get('/reminders', [TaskController::class, 'showReminders'])->name('reminders');
 });
-
-Route::get('/about', function () {
-    return view('about', ['title' => 'about']);
-});
-
-Route::get('register', function () {
-    return view('auth.register', ['title' => 'register']);
-})->name('register');
-
-Route::get('login', function () {
-    return view('auth.login', ['title' => 'login']);
-})->name('login');
-
-// Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
-
-Route::resource('task', TaskController::class);

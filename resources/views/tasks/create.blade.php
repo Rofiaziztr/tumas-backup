@@ -1,39 +1,59 @@
-<<x-layout>
+@extends('layouts.app')
 
-    <h1>Form pengisian tugas</h1>
+@section('content')
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h2>Tambah Tugas Baru</h2>
+        </div>
+    </div>
 
-    @if ($message = Session::get('error'))
+    @if ($errors->any())
         <div class="alert alert-danger">
-            <p>{{ $message }}</p>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
     @endif
 
-    <form action="{{ route('task.store') }}" method="post">
+    <form action="{{ route('tasks.store') }}" method="POST">
         @csrf
-
         <div class="mb-3">
-            <label for="">Judul Tugas</label>
-            <input type="text" name="title" class="form-comtrol">
+            <label for="title" class="form-label">Judul Tugas *</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required>
         </div>
-
         <div class="mb-3">
-            <label for="">Deskripsi Tugas</label>
-            <input type="text" name="description" class="form-comtrol">
+            <label for="description" class="form-label">Deskripsi</label>
+            <textarea class="form-control" id="description" name="description" rows="3">{{ old('description') }}</textarea>
         </div>
-
         <div class="mb-3">
-            <label for="">Status</label>
-            <input type="text" name="status" class="form-comtrol">
+            <label for="course" class="form-label">Mata Kuliah *</label>
+            <input type="text" class="form-control" id="course" name="course" value="{{ old('course') }}" required>
         </div>
-
         <div class="mb-3">
-            <label for="">Dateline</label>
-            <input type="text" name="due_date" class="form-comtrol">
+            <label for="deadline" class="form-label">Deadline *</label>
+            <input type="datetime-local" class="form-control" id="deadline" name="deadline" value="{{ old('deadline') }}"
+                required>
         </div>
-
         <div class="mb-3">
-            <input type="submit" value="simpan" class="btn btn-success float-end">
+            <label for="priority" class="form-label">Prioritas *</label>
+            <select class="form-select" id="priority" name="priority" required>
+                <option value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>Rendah</option>
+                <option value="medium" {{ old('priority') == 'medium' ? 'selected' : '' }}>Sedang</option>
+                <option value="high" {{ old('priority') == 'high' ? 'selected' : '' }}>Tinggi</option>
+            </select>
         </div>
+        <div class="mb-3">
+            <label for="status" class="form-label">Status *</label>
+            <select class="form-select" id="status" name="status" required>
+                <option value="todo" {{ old('status') == 'todo' ? 'selected' : '' }}>Belum Dikerjakan</option>
+                <option value="in_progress" {{ old('status') == 'in_progress' ? 'selected' : '' }}>Sedang Dikerjakan
+                </option>
+                <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Selesai</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Simpan</button>
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Batal</a>
     </form>
-
-    </x-layout>
+@endsection
