@@ -113,5 +113,5 @@ Proyek ini dilisensikan di bawah [MIT License](LICENSE).
 
 ---
 
-**Tumas** © 2023 - Aplikasi Manajemen Tugas untuk Mahasiswa  
+**Tumas** © 2025 - Aplikasi Manajemen Tugas untuk Mahasiswa  
 Dibangun dengan ❤️ menggunakan Laravel
