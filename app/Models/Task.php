@@ -15,6 +15,7 @@ class Task extends Model
         'title',
         'description',
         'course',
+        'category',
         'deadline',
         'priority',
         'status'

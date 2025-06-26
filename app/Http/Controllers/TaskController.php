@@ -14,46 +14,30 @@ class TaskController extends Controller
             return redirect()->route('login');
         }
 
-        $query = Task::where('user_id', Auth::id());
+        // Ambil tugas overdue dan nearing deadline
+        $overdueTasks = $this->getOverdueTasks();
+        $nearingDeadlineTasks = $this->getNearingDeadlineTasks();
 
-        // Filter berdasarkan status
-        if ($request->has('status') && $request->status != '') {
-            $query->where('status', $request->status);
-        }
+        // Query tugas dengan filter
+        $query = Task::where('user_id', Auth::id())
+            ->whereNotIn('id', $overdueTasks->pluck('id')); // Hindari duplikasi dengan overdue
 
-        // Filter berdasarkan mata kuliah
-        if ($request->has('course') && $request->course != '') {
-            $query->where('course', 'like', '%' . $request->course . '%');
-        }
-
+        $this->applyFilters($query, $request);
         $tasks = $query->orderBy('deadline')->get();
 
-        // Ambil pengingat
-        $reminders = Task::where('user_id', Auth::id())
-            ->where('deadline', '<=', now()->addDays(3))
-            ->where('status', '!=', 'completed')
-            ->get();
+        // Hitung jumlah reminder
+        $reminderCount = $nearingDeadlineTasks->count() + $overdueTasks->count();
 
-        // Hitung jumlah reminder untuk navbar
-        $reminderCount = Task::where('user_id', Auth::id())
-            ->where('deadline', '<=', now()->addDays(3))
-            ->where('status', '!=', 'completed')
-            ->count();
-
-        return view('dashboard', compact('tasks', 'reminders', 'reminderCount'));
+        return view('dashboard', compact('tasks', 'nearingDeadlineTasks', 'overdueTasks', 'reminderCount'));
     }
 
     public function showReminders()
     {
-        $reminders = Task::where('user_id', Auth::id())
-            ->where('deadline', '<=', now()->addDays(3))
-            ->where('status', '!=', 'completed')
-            ->orderBy('deadline')
-            ->get();
+        $overdueTasks = $this->getOverdueTasks();
+        $nearingDeadlineTasks = $this->getNearingDeadlineTasks();
+        $reminderCount = $nearingDeadlineTasks->count() + $overdueTasks->count();
 
-        $reminderCount = $reminders->count();
-
-        return view('reminders', compact('reminders', 'reminderCount'));
+        return view('reminders', compact('nearingDeadlineTasks', 'overdueTasks', 'reminderCount'));
     }
 
     public function create()
@@ -107,6 +91,16 @@ class TaskController extends Controller
         return redirect()->route('dashboard')->with('success', 'Tugas berhasil diperbarui!');
     }
 
+    public function show(Task $task)
+    {
+        // Pastikan tugas milik user yang login
+        if ($task->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return view('tasks.show', compact('task'));
+    }
+
     public function destroy(Task $task)
     {
         if ($task->user_id !== Auth::id()) {
@@ -115,5 +109,48 @@ class TaskController extends Controller
 
         $task->delete();
         return redirect()->route('dashboard')->with('success', 'Tugas berhasil dihapus!');
+    }
+
+    private function getOverdueTasks()
+    {
+        return Task::where('user_id', Auth::id())
+            ->where('deadline', '<', now()->utc())
+            ->where('status', '!=', 'completed')
+            ->orderBy('deadline')
+            ->get();
+    }
+
+    /**
+     * Helper method untuk mendapatkan tugas mendekati deadline
+     */
+    private function getNearingDeadlineTasks()
+    {
+        return Task::where('user_id', Auth::id())
+            ->where('deadline', '>=', now()->utc())
+            ->where('deadline', '<=', now()->utc()->addDays(3))
+            ->where('status', '!=', 'completed')
+            ->orderBy('deadline')
+            ->get();
+    }
+
+    /**
+     * Helper method untuk menerapkan filter
+     */
+    private function applyFilters($query, Request $request)
+    {
+        // Filter status
+        if ($request->filled('status')) {
+            $query->whereIn('status', $request->status);
+        }
+
+        // Filter mata kuliah
+        if ($request->filled('course')) {
+            $query->where('course', 'like', '%' . $request->course . '%');
+        }
+
+        // Filter kategori
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
     }
 }

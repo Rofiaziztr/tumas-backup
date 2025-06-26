@@ -7,59 +7,51 @@
         </div>
     </div>
 
-    @if ($reminders->isEmpty())
+    @php
+        $totalReminders = $nearingDeadlineTasks->count() + $overdueTasks->count();
+    @endphp
+
+    @if ($totalReminders === 0)
         <div class="alert alert-info">
-            Tidak ada tugas dengan deadline dekat. Bagus!
+            Tidak ada tugas yang perlu diperhatikan. Bagus!
         </div>
     @else
-        <div class="alert alert-warning">
-            <i class="bi bi-exclamation-triangle"></i> Anda memiliki {{ $reminders->count() }} tugas yang mendekati deadline!
-        </div>
-
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Judul</th>
-                                <th>Mata Kuliah</th>
-                                <th>Deadline</th>
-                                <th>Sisa Waktu</th>
-                                <th>Prioritas</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($reminders as $task)
-                                <tr>
-                                    <td>{{ $task->title }}</td>
-                                    <td>{{ $task->course }}</td>
-                                    <td>{{ $task->deadline->setTimezone('Asia/Jakarta')->format('d M Y H:i') }} WIB</td>
-                                    <td>
-                                        @php
-                                            $diff = $task->deadline->diff(now());
-                                        @endphp
-                                        {{ $diff->d }} hari, {{ $diff->h }} jam
-                                    </td>
-                                    <td>
-                                        <span
-                                            class="badge bg-{{ $task->priority == 'high' ? 'danger' : ($task->priority == 'medium' ? 'warning' : 'success') }}">
-                                            {{ ucfirst($task->priority) }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span
-                                            class="badge bg-{{ $task->status == 'completed' ? 'success' : ($task->status == 'in_progress' ? 'primary' : 'secondary') }}">
-                                            {{ ucfirst(str_replace('_', ' ', $task->status)) }}
-                                        </span>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+        {{-- Tampilkan tugas overdue --}}
+        @if (!$overdueTasks->isEmpty())
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle"></i> Anda memiliki {{ $overdueTasks->count() }} tugas yang sudah lewat
+                deadline!
             </div>
-        </div>
+
+            @include('partials.card-task', [
+                'tasks' => $overdueTasks,
+                'header' => 'Tugas Terlambat (Overdue)',
+                'headerClass' => 'bg-danger text-white',
+                'borderClass' => 'border-danger mb-4',
+                'timeColumn' => [
+                    'label' => 'Keterlambatan',
+                    'type' => 'overdue',
+                ],
+            ])
+        @endif
+
+        {{-- Tampilkan tugas yang mendekati deadline --}}
+        @if (!$nearingDeadlineTasks->isEmpty())
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle"></i> Anda memiliki {{ $nearingDeadlineTasks->count() }} tugas yang
+                mendekati deadline!
+            </div>
+
+            @include('partials.card-task', [
+                'tasks' => $nearingDeadlineTasks,
+                'header' => 'Deadline Mendekati (3 Hari Ke Depan)',
+                'headerClass' => 'bg-warning text-white',
+                'borderClass' => 'border-warning',
+                'timeColumn' => [
+                    'label' => 'Sisa Waktu',
+                    'type' => 'nearing',
+                ],
+            ])
+        @endif
     @endif
 @endsection

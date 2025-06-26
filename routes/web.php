@@ -15,6 +15,7 @@ Route::middleware(['auth'])->group(function () {
         'store',
         'edit',
         'update',
+        'show',
         'destroy'
     ]);
     Route::get('/reminders', [TaskController::class, 'showReminders'])->name('reminders');
