@@ -49,28 +49,41 @@
                                 <td>
                                     <span
                                         class="badge bg-{{ $task->priority == 'high' ? 'danger' : ($task->priority == 'medium' ? 'warning' : 'success') }}">
-                                        {{ ucfirst($task->priority) }}
+                                        @if ($task->priority == 'high')
+                                            Tinggi
+                                        @elseif($task->priority == 'medium')
+                                            Sedang
+                                        @else
+                                            Rendah
+                                        @endif
                                     </span>
                                 </td>
                                 <td>
                                     <span
                                         class="badge bg-{{ $task->status == 'completed' ? 'success' : ($task->status == 'in_progress' ? 'primary' : 'secondary') }}">
-                                        {{ ucfirst(str_replace('_', ' ', $task->status)) }}
+                                        @if ($task->status == 'completed')
+                                            Selesai
+                                        @elseif($task->status == 'in_progress')
+                                            Sedang Dikerjakan
+                                        @else
+                                            Belum Dikerjakan
+                                        @endif
                                     </span>
                                 </td>
-
                                 <td>
-                                    <a href="{{ route('tasks.edit', $task->id) }}"
-                                        class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
                                     <form action="{{ route('tasks.destroy', $task->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Hapus tugas?')">Hapus</button>
+                                            onclick="return confirm('Hapus tugas?')">
+                                            <i class="bi bi-trash"></i> Hapus
+                                        </button>
                                     </form>
                                 </td>
-
                             </tr>
                         @endforeach
                     </tbody>

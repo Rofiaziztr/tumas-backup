@@ -15,9 +15,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('reminders') }}">
                             <i class="bi bi-bell"></i> Pengingat
-                            @if (isset($reminderCount) && $reminderCount > 0)
-                                <span class="badge bg-danger">{{ $reminderCount }}</span>
-                            @endif
+                            @isset($globalReminderCount)
+                                @if ($globalReminderCount > 0)
+                                    <span class="badge bg-danger">{{ $globalReminderCount }}</span>
+                                @endif
+                            @endisset
                         </a>
                     </li>
                     <li class="nav-item dropdown">
