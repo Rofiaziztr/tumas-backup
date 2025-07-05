@@ -4,7 +4,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="collapse navbar-collapse " id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 @auth
                     <li class="nav-item">
@@ -12,15 +12,35 @@
                             <i class="bi bi-plus-circle"></i> Tambah Tugas
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('reminders') }}">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="{{ route('reminders') }}" id="notificationDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-bell"></i> Pengingat
-                            @isset($globalReminderCount)
-                                @if ($globalReminderCount > 0)
-                                    <span class="badge bg-danger">{{ $globalReminderCount }}</span>
-                                @endif
-                            @endisset
+                            @if (isset($globalReminderCount) && $globalReminderCount > 0)
+                                <span class="badge bg-danger rounded-pill">{{ $globalReminderCount }}</span>
+                            @endif
                         </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
+                            @if (isset($globalNotifications) && $globalNotifications->count() > 0)
+                                @foreach ($globalNotifications as $notification)
+                                    <li>
+                                        {{-- Arahkan ke detail tugas ketika notifikasi diklik --}}
+                                        <a class="dropdown-item"
+                                            href="{{ route('tasks.show', $notification->data['task_id']) }}?mark_as_read={{ $notification->id }}">
+                                            <div class="fw-bold">{{ Str::limit($notification->data['title'], 25) }}</div>
+                                            <div class="small text-muted">{{ $notification->data['message'] }}</div>
+                                        </a>
+                                    </li>
+                                @endforeach
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item text-center" href="{{ route('reminders') }}">Lihat Semua</a>
+                                </li>
+                            @else
+                                <li><span class="dropdown-item text-center text-muted">Tidak ada notifikasi baru</span></li>
+                            @endif
+                        </ul>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
