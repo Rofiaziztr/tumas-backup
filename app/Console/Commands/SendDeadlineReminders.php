@@ -29,8 +29,8 @@ class SendDeadlineReminders extends Command
 
         // Cari semua tugas yang belum selesai dan akan berakhir besok.
         $tasks = Task::where('status', '!=', 'completed')
-                     ->whereDate('deadline', now()->addDay()->toDateString())
-                     ->get();
+            ->whereBetween('deadline', [now(), now()->addDays(3)])
+            ->get();
 
         if ($tasks->isEmpty()) {
             $this->info('Tidak ada tugas yang perlu diingatkan hari ini.');
