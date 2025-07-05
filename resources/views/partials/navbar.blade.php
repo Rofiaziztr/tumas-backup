@@ -4,7 +4,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse " id="navbarNav">
+        <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 @auth
                     <li class="nav-item">
@@ -14,7 +14,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('reminders') }}">
-                            <i class="bi bi-bell text-uppercase"></i> Pengingat
+                            <i class="bi bi-bell"></i> Pengingat
                             @isset($globalReminderCount)
                                 @if ($globalReminderCount > 0)
                                     <span class="badge bg-danger">{{ $globalReminderCount }}</span>

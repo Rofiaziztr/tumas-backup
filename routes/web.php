@@ -2,12 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
-use App\Mail\SendEmail;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
-
-
 
 
 Auth::routes(['verify' => false]);
