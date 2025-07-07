@@ -14,21 +14,21 @@ class TaskController extends Controller
             return redirect()->route('login');
         }
 
-        // Ambil tugas overdue dan nearing deadline
+        // Ambil ID tugas yg masuk kategori pengingat (terlambat & mendekati)
         $overdueTasks = $this->getOverdueTasks();
         $nearingDeadlineTasks = $this->getNearingDeadlineTasks();
 
-        // Query tugas dengan filter
+        $excludedIds = $overdueTasks->pluck('id')->merge($nearingDeadlineTasks->pluck('id'));
+
+        // Query tugas utama: tidak terlambat dan tidak mendekati deadline.
         $query = Task::where('user_id', Auth::id())
-            ->whereNotIn('id', $overdueTasks->pluck('id')); // Hindari duplikasi dengan overdue
+            ->whereNotIn('id', $excludedIds) // Hindari duplikasi
+            ->where('status', '!=', 'completed'); // Hanya tampilkan yang belum selesai
 
         $this->applyFilters($query, $request);
         $tasks = $query->orderBy('deadline')->get();
 
-        // Hitung jumlah reminder
-        $reminderCount = $nearingDeadlineTasks->count() + $overdueTasks->count();
-
-        return view('dashboard', compact('tasks', 'nearingDeadlineTasks', 'overdueTasks', 'reminderCount'));
+        return view('dashboard', compact('tasks', 'nearingDeadlineTasks', 'overdueTasks'));
     }
 
     public function showReminders()
