@@ -24,4 +24,5 @@ Route::middleware(['auth'])->group(function () {
     ]);
     Route::get('/reminders', [TaskController::class, 'showReminders'])->name('reminders');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });

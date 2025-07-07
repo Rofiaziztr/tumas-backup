@@ -17,7 +17,7 @@ class TaskSeeder extends Seeder
 
         $userIds = DB::table('users')->pluck('id');
 
-        foreach (range(1, 30) as $i) {
+        foreach (range(1, 50) as $i) {
             $isOverdue = rand(1, 10) <= 3;
             $deadline = $isOverdue
                 ? Carbon::now()->subDays(rand(1, 5))

@@ -18,6 +18,26 @@
         </div>
     @endif
 
+    {{-- Ringkasan Notifikasi --}}
+    @if ($overdueTasks->count() > 0 || $nearingDeadlineTasks->count() > 0)
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="alert alert-danger mb-0">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Anda punya <strong>{{ $overdueTasks->count() }}</strong>
+                    tugas terlambat.
+                    <a href="{{ route('reminders') }}" class="alert-link">Lihat Detail</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="alert alert-warning mb-0">
+                    <i class="bi bi-clock-fill"></i> Anda punya <strong>{{ $nearingDeadlineTasks->count() }}</strong> tugas
+                    mendekati deadline.
+                    <a href="{{ route('reminders') }}" class="alert-link">Lihat Detail</a>
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{-- Filter --}}
     <div class="card mb-4">
         <div class="card-header">Filter Tugas</div>
@@ -77,6 +97,6 @@
     <!-- Tugas Utama -->
     @include('partials.card-task', [
         'tasks' => $tasks,
-        'header' => 'Daftar Tugas',
+        'header' => 'Daftar Tugas Anda',
     ])
 @endsection
