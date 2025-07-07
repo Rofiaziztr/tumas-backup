@@ -67,7 +67,12 @@
                     <div class="card bg-light">
                         <div class="card-header">Info Waktu</div>
                         <div class="card-body">
-                            @if ($task->deadline < now())
+                            @if ($task->status == 'completed')
+                                <div class="alert alert-info">
+                                    <strong>Selesai!</strong><br>
+                                    Tugas ini telah Anda selesaikan.
+                                </div>
+                            @elseif ($task->deadline < now())
                                 <div class="alert alert-danger">
                                     <strong>Terlambat!</strong><br>
                                     @php
@@ -92,6 +97,7 @@
                                     Sisa waktu: {{ $diff->d }} hari, {{ $diff->h }} jam
                                 </div>
                             @endif
+
                         </div>
                     </div>
                 </div>
