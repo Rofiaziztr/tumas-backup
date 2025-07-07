@@ -1,8 +1,206 @@
-// Fonts
-@import url('https://fonts.bunny.net/css?family=Nunito');
+// resources/sass/app.scss (INI FILE YANG BENAR)
 
-// Variables
-@import 'variables';
+// 1. Import Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-// Bootstrap
+// 2. Import Bootstrap SCSS
 @import 'bootstrap/scss/bootstrap';
+
+// 3. Import Bootstrap Icons CSS
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+/* ==================================================
+   TUMAS - MODERN THEME CUSTOMIZATION
+   ================================================== */
+
+:root {
+  --tumas-bg: #f4f7fe;
+  --tumas-sidebar-bg: linear-gradient(180deg, #4a00e0, #8e2de2);
+  --tumas-sidebar-text: #ffffff;
+  --tumas-sidebar-text-hover: #ffffff;
+  --tumas-sidebar-active-bg: rgba(255, 255, 255, 0.15);
+  --tumas-text-primary: #333;
+  --tumas-text-secondary: #6c757d;
+  --tumas-primary-color: #6a3093;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--tumas-bg);
+    color: var(--tumas-text-primary);
+}
+
+#wrapper {
+  overflow-x: hidden;
+}
+
+/* Sidebar */
+#sidebar-wrapper {
+  min-height: 100vh;
+  width: 17rem;
+  margin-left: -17rem;
+  transition: margin 0.25s ease-out;
+  background-image: var(--tumas-sidebar-bg);
+  padding: 0;
+  border-right: none;
+}
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 1rem 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--tumas-sidebar-text);
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#sidebar-wrapper .list-group {
+  width: 17rem;
+  padding-top: 1rem;
+}
+
+#sidebar-wrapper .list-group-item {
+  background-color: transparent;
+  border: none;
+  color: var(--tumas-sidebar-text);
+  opacity: 0.8;
+  padding: 0.85rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+#sidebar-wrapper .list-group-item i {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-right: 0.75rem;
+}
+
+#sidebar-wrapper .list-group-item:hover {
+  background-color: var(--tumas-sidebar-active-bg);
+  color: var(--tumas-sidebar-text-hover);
+  opacity: 1;
+  transform: translateX(5px);
+}
+
+#sidebar-wrapper .list-group-item.active {
+  background-color: var(--tumas-sidebar-active-bg);
+  opacity: 1;
+  font-weight: 600;
+  border-left: 4px solid var(--tumas-sidebar-text);
+}
+
+/* Page Content Wrapper */
+#page-content-wrapper {
+    flex-grow: 1;
+    width: 100%;
+    min-width: 0;
+}
+
+body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
+  margin-left: 0;
+}
+
+@media (min-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: calc(100% - 17rem);
+    }
+
+    body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
+        margin-left: -17rem;
+    }
+}
+
+/* Top Navigation */
+#page-content-wrapper .navbar {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+    padding: 0.75rem 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.btn#sidebarToggle {
+    background-color: transparent;
+    border: 1px solid #ddd;
+    color: #6c757d;
+    box-shadow: none;
+}
+ .btn#sidebarToggle:hover {
+    background-color: #f8f9fa;
+}
+
+/* Guest Layout */
+.guest-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: var(--tumas-bg, #f4f7fe);
+    padding: 1rem;
+}
+
+.guest-container {
+    width: 100%;
+    max-width: 450px;
+}
+
+.guest-brand {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--tumas-primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.guest-brand i {
+    margin-right: 0.5rem;
+}
+
+/* Card style */
+.card {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: 600;
+    padding: 1rem 1.25rem;
+}
+.card-body {
+    padding: 1.25rem;
+}
+.card-footer {
+    background-color: transparent;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* Button style */
+.btn-primary {
+  --bs-btn-bg: var(--tumas-primary-color);
+  --bs-btn-border-color: var(--tumas-primary-color);
+  --bs-btn-hover-bg: #5e2a84;
+  --bs-btn-hover-border-color: #5e2a84;
+  --bs-btn-active-bg: #5e2a84;
+  --bs-btn-active-border-color: #5e2a84;
+}
+
+/* Override sidebar script original margin */
+@media (min-width: 768px) {
+    body.sb-sidenav-toggled #wrapper #page-content-wrapper {
+        margin-left: 0;
+    }
+}
