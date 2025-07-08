@@ -1,11 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h2>Tambah Tugas Baru</h2>
-        </div>
-    </div>
+    @include('partials.page-header', [
+        'title' => 'Tambah Tugas Baru',
+        'subtitle' => 'Isi detail tugas Anda di bawah ini.',
+    ])
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -16,11 +15,28 @@
             </ul>
         </div>
     @endif
-
-    <form action="{{ route('tasks.store') }}" method="POST">
-        @csrf
-        @include('tasks.form')
-        <button type="submit" class="btn btn-primary">Simpan</button>
-        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Batal</a>
-    </form>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ route('tasks.store') }}" method="POST">
+                        @csrf
+                        @include('tasks.form')
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Batal</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
+
+@push('scripts')
+    <script>
+        flatpickr("#deadline-picker", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            time_24hr: true
+        });
+    </script>
+@endpush

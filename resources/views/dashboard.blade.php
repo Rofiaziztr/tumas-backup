@@ -1,16 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h2>Dashboard Tugas</h2>
-        </div>
-        <div class="col-md-6 text-end">
-            <a href="{{ route('tasks.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Tambah Tugas
-            </a>
-        </div>
-    </div>
+    @include('partials.page-header', [
+        'title' => 'Dashboard Tugas',
+        'actions' =>
+            '
+                    <a href="' .
+            route('tasks.create') .
+            '" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Tambah Tugas
+                    </a>
+                ',
+    ])
 
     @if (session('success'))
         <div class="alert alert-success">
@@ -20,19 +21,32 @@
 
     {{-- Ringkasan Notifikasi --}}
     @if ($overdueTasks->count() > 0 || $nearingDeadlineTasks->count() > 0)
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="alert alert-danger mb-0">
-                    <i class="bi bi-exclamation-triangle-fill"></i> Anda punya <strong>{{ $overdueTasks->count() }}</strong>
-                    tugas terlambat.
-                    <a href="{{ route('reminders') }}" class="alert-link">Lihat Detail</a>
+        <div class="row">
+            {{-- Overdue Tasks Alert --}}
+            <div class="col-lg-6 mb-4">
+                <div class="alert alert-danger h-100 d-flex flex-column justify-content-center">
+                    <div class="d-flex align-items-center">
+                        <div class="fs-1 fw-bold me-3">{{ $overdueTasks->count() }}</div>
+                        <div class="flex-grow-1">
+                            <h5 class="alert-heading mb-0">Tugas Terlambat</h5>
+                            <small>Segera kerjakan sebelum menumpuk!</small>
+                        </div>
+                        <i class="bi bi-exclamation-triangle-fill fs-2 opacity-25"></i>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="alert alert-warning mb-0">
-                    <i class="bi bi-clock-fill"></i> Anda punya <strong>{{ $nearingDeadlineTasks->count() }}</strong> tugas
-                    mendekati deadline.
-                    <a href="{{ route('reminders') }}" class="alert-link">Lihat Detail</a>
+
+            {{-- Nearing Deadline Tasks Alert --}}
+            <div class="col-lg-6 mb-4">
+                <div class="alert alert-warning h-100 d-flex flex-column justify-content-center">
+                    <div class="d-flex align-items-center">
+                        <div class="fs-1 fw-bold me-3">{{ $nearingDeadlineTasks->count() }}</div>
+                        <div class="flex-grow-1">
+                            <h5 class="alert-heading mb-0">Mendekati Deadline</h5>
+                            <small>Jangan sampai terlewat!</small>
+                        </div>
+                        <i class="bi bi-clock-fill fs-2 opacity-25"></i>
+                    </div>
                 </div>
             </div>
         </div>

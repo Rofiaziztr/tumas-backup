@@ -2,12 +2,16 @@
     @if (isset($header))
         <div class="card-header {{ $headerClass ?? '' }}">{!! $header !!}</div>
     @endif
-    <div class="card-body">
-        @if ($tasks->isEmpty())
-            <p class="text-muted">Belum ada tugas.</p>
+    <div class="card-body card-body-table">
+
+        @if ($tasks->count() == 0)
+            <div class="text-center py-4">
+                <i class="bi bi-check2-circle fs-1 text-success mb-2"></i>
+                <p class="text-muted mb-0">Tidak ada tugas dalam kategori ini.</p>
+            </div>
         @else
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table table-striped table-hover">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -25,24 +29,23 @@
                     </thead>
                     <tbody>
                         @foreach ($tasks as $task)
-                            <tr class="{{ $rowClass ?? '' }}">
-                                <td>{{ $loop->iteration }}</td>
+                            <tr>
+                                {{-- Gunakan key dari paginator untuk nomor urut yang benar --}}
+                                <td>{{ $tasks->firstItem() + $loop->index }}</td>
                                 <td>
                                     <a href="{{ route('tasks.show', $task->id) }}">{{ $task->title }}</a>
                                 </td>
                                 <td>{{ $task->course }}</td>
                                 <td>{{ $task->category }}</td>
-                                <td>{{ $task->deadline->setTimezone('Asia/Jakarta')->format('d M Y H:i') }} WIB</td>
+                                <td>{{ \Carbon\Carbon::parse($task->deadline)->setTimezone('Asia/Jakarta')->format('d M Y H:i') }}
+                                    WIB</td>
 
                                 @if (isset($timeColumn))
                                     <td>
                                         @php
-                                            $diff =
-                                                $timeColumn['type'] === 'overdue'
-                                                    ? now()->diff($task->deadline)
-                                                    : $task->deadline->diff(now());
+                                            $diff = $task->deadline->diffForHumans(null, true);
                                         @endphp
-                                        {{ $diff->d }} hari, {{ $diff->h }} jam
+                                        {{ $diff }}
                                     </td>
                                 @endif
 
@@ -71,18 +74,20 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-warning">
-                                        <i class="bi bi-pencil"></i> Edit
-                                    </a>
-                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST"
-                                        class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Hapus tugas?')">
-                                            <i class="bi bi-trash"></i> Hapus
-                                        </button>
-                                    </form>
+                                    <div class="btn-group" role="group" aria-label="Aksi Tugas">
+                                        <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-warning">
+                                            <i class="bi bi-pencil"></i> <span class="d-none d-md-inline">Edit</span>
+                                        </a>
+                                        <form action="{{ route('tasks.destroy', $task->id) }}" method="POST"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus tugas ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-trash"></i> <span
+                                                    class="d-none d-md-inline">Hapus</span>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -91,4 +96,21 @@
             </div>
         @endif
     </div>
+
+    @if ($tasks instanceof \Illuminate\Pagination\LengthAwarePaginator && $tasks->hasPages())
+        <div class="card-footer bg-transparent pt-3 pb-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    {!! $tasks->withQueryString()->links('vendor.pagination.custom') !!}
+                </div>
+
+                <div class="text-muted">
+                    <small>
+                        Showing {{ $tasks->firstItem() }} to {{ $tasks->lastItem() }} of {{ $tasks->total() }}
+                        results
+                    </small>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

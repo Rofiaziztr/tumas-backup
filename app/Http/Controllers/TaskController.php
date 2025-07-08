@@ -26,18 +26,9 @@ class TaskController extends Controller
             ->where('status', '!=', 'completed'); // Hanya tampilkan yang belum selesai
 
         $this->applyFilters($query, $request);
-        $tasks = $query->orderBy('deadline')->get();
+        $tasks = $query->orderBy('deadline')->paginate(10);
 
         return view('dashboard', compact('tasks', 'nearingDeadlineTasks', 'overdueTasks'));
-    }
-
-    public function showReminders()
-    {
-        $overdueTasks = $this->getOverdueTasks();
-        $nearingDeadlineTasks = $this->getNearingDeadlineTasks();
-        $reminderCount = $nearingDeadlineTasks->count() + $overdueTasks->count();
-
-        return view('reminders', compact('nearingDeadlineTasks', 'overdueTasks', 'reminderCount'));
     }
 
     public function create()
@@ -111,26 +102,47 @@ class TaskController extends Controller
         return redirect()->route('dashboard')->with('success', 'Tugas berhasil dihapus!');
     }
 
-    private function getOverdueTasks()
+    public function showReminders()
     {
-        return Task::where('user_id', Auth::id())
-            ->where('deadline', '<', now()->utc())
-            ->where('status', '!=', 'completed')
-            ->orderBy('deadline')
-            ->get();
+        $user = Auth::user(); // Ambil data user yang sedang login
+
+        $overdueTasks = $this->getOverdueTasks(true);
+        $nearingDeadlineTasks = $this->getNearingDeadlineTasks(true);
+
+        $reminderCount = $overdueTasks->total() + $nearingDeadlineTasks->total();
+
+        // Kirim data reminderDays ke view
+        return view('reminders', [
+            'nearingDeadlineTasks' => $nearingDeadlineTasks,
+            'overdueTasks' => $overdueTasks,
+            'reminderCount' => $reminderCount,
+            'reminderDays' => $user->reminder_days_before
+        ]);
     }
 
-    /**
-     * Helper method untuk mendapatkan tugas mendekati deadline
-     */
-    private function getNearingDeadlineTasks()
+    private function getOverdueTasks($paginate = false)
     {
-        return Task::where('user_id', Auth::id())
+        // 1. Bangun query-nya dulu, jangan langsung di-return
+        $query = Task::where('user_id', Auth::id())
+            ->where('deadline', '<', now()->utc())
+            ->where('status', '!=', 'completed')
+            ->orderBy('deadline');
+
+        // 2. Sekarang baru eksekusi query sesuai kondisi
+        return $paginate ? $query->paginate(10, ['*'], 'overdue_page') : $query->get();
+    }
+
+    private function getNearingDeadlineTasks($paginate = false)
+    {
+        // 1. Bangun query-nya dulu
+        $query = Task::where('user_id', Auth::id())
             ->where('deadline', '>=', now()->utc())
             ->where('deadline', '<=', now()->utc()->addDays(3))
             ->where('status', '!=', 'completed')
-            ->orderBy('deadline')
-            ->get();
+            ->orderBy('deadline');
+
+        // 2. Eksekusi query
+        return $paginate ? $query->paginate(10, ['*'], 'nearing_page') : $query->get();
     }
 
     /**

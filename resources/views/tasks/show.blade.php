@@ -1,20 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <h2>Detail Tugas</h2>
-        </div>
-        <div class="col-md-6 text-end">
-            <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning">Edit</a>
-            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="d-inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger" onclick="return confirm('Hapus tugas?')">Hapus</button>
-            </form>
-            <a href="{{ route('dashboard') }}" class="btn btn-secondary">Kembali</a>
-        </div>
-    </div>
+    @include('partials.page-header', [
+        'title' => 'Tambah Tugas Baru',
+        'subtitle' => 'Isi detail tugas Anda di bawah ini.',
+    ])
+
 
     <div class="card">
         <div class="card-body">
@@ -99,6 +90,16 @@
                             @endif
 
                         </div>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning">Edit</a>
+                        <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('Hapus tugas?')">Hapus</button>
+                        </form>
+                        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Kembali</a>
                     </div>
                 </div>
             </div>

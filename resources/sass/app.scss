@@ -1,76 +1,76 @@
 // resources/sass/app.scss (INI FILE YANG BENAR)
 
 // 1. Import Google Fonts
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 // 2. Import Bootstrap SCSS
-@import 'bootstrap/scss/bootstrap';
+@import "bootstrap/scss/bootstrap";
 
 // 3. Import Bootstrap Icons CSS
-@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import "bootstrap-icons/font/bootstrap-icons.css";
 
 /* ==================================================
    TUMAS - MODERN THEME CUSTOMIZATION
    ================================================== */
 
 :root {
-  --tumas-bg: #f4f7fe;
-  --tumas-sidebar-bg: linear-gradient(180deg, #4a00e0, #8e2de2);
-  --tumas-sidebar-text: #ffffff;
-  --tumas-sidebar-text-hover: #ffffff;
-  --tumas-sidebar-active-bg: rgba(255, 255, 255, 0.15);
-  --tumas-text-primary: #333;
-  --tumas-text-secondary: #6c757d;
-  --tumas-primary-color: #6a3093;
+    --tumas-bg: #f4f7fe;
+    --tumas-sidebar-bg: linear-gradient(180deg, #4a00e0, #8e2de2);
+    --tumas-sidebar-text: #ffffff;
+    --tumas-sidebar-text-hover: #ffffff;
+    --tumas-sidebar-active-bg: rgba(255, 255, 255, 0.15);
+    --tumas-text-primary: #333;
+    --tumas-text-secondary: #6c757d;
+    --tumas-primary-color: #6a3093;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     background-color: var(--tumas-bg);
     color: var(--tumas-text-primary);
 }
 
 #wrapper {
-  overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 /* Sidebar */
 #sidebar-wrapper {
-  min-height: 100vh;
-  width: 17rem;
-  margin-left: -17rem;
-  transition: margin 0.25s ease-out;
-  background-image: var(--tumas-sidebar-bg);
-  padding: 0;
-  border-right: none;
+    min-height: 100vh;
+    width: 17rem;
+    margin-left: -17rem;
+    transition: margin 0.25s ease-out;
+    background-image: var(--tumas-sidebar-bg);
+    padding: 0;
+    border-right: none;
 }
 
 #sidebar-wrapper .sidebar-heading {
-  padding: 1rem 1.5rem;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--tumas-sidebar-text);
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1rem 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--tumas-sidebar-text);
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 #sidebar-wrapper .list-group {
-  width: 17rem;
-  padding-top: 1rem;
+    width: 17rem;
+    padding-top: 1rem;
 }
 
 #sidebar-wrapper .list-group-item {
-  background-color: transparent;
-  border: none;
-  color: var(--tumas-sidebar-text);
-  opacity: 0.8;
-  padding: 0.85rem 1.5rem;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
+    background-color: transparent;
+    border: none;
+    color: var(--tumas-sidebar-text);
+    opacity: 0.8;
+    padding: 0.85rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 
 #sidebar-wrapper .list-group-item i {
@@ -80,17 +80,17 @@ body {
 }
 
 #sidebar-wrapper .list-group-item:hover {
-  background-color: var(--tumas-sidebar-active-bg);
-  color: var(--tumas-sidebar-text-hover);
-  opacity: 1;
-  transform: translateX(5px);
+    background-color: var(--tumas-sidebar-active-bg);
+    color: var(--tumas-sidebar-text-hover);
+    opacity: 1;
+    transform: translateX(5px);
 }
 
 #sidebar-wrapper .list-group-item.active {
-  background-color: var(--tumas-sidebar-active-bg);
-  opacity: 1;
-  font-weight: 600;
-  border-left: 4px solid var(--tumas-sidebar-text);
+    background-color: var(--tumas-sidebar-active-bg);
+    opacity: 1;
+    font-weight: 600;
+    border-left: 4px solid var(--tumas-sidebar-text);
 }
 
 /* Page Content Wrapper */
@@ -101,7 +101,7 @@ body {
 }
 
 body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
-  margin-left: 0;
+    margin-left: 0;
 }
 
 @media (min-width: 768px) {
@@ -124,7 +124,7 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     background-color: #fff;
     border-bottom: 1px solid #e9ecef;
     padding: 0.75rem 1.5rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .btn#sidebarToggle {
@@ -133,7 +133,7 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     color: #6c757d;
     box-shadow: none;
 }
- .btn#sidebarToggle:hover {
+.btn#sidebarToggle:hover {
     background-color: #f8f9fa;
 }
 
@@ -190,12 +190,12 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
 
 /* Button style */
 .btn-primary {
-  --bs-btn-bg: var(--tumas-primary-color);
-  --bs-btn-border-color: var(--tumas-primary-color);
-  --bs-btn-hover-bg: #5e2a84;
-  --bs-btn-hover-border-color: #5e2a84;
-  --bs-btn-active-bg: #5e2a84;
-  --bs-btn-active-border-color: #5e2a84;
+    --bs-btn-bg: var(--tumas-primary-color);
+    --bs-btn-border-color: var(--tumas-primary-color);
+    --bs-btn-hover-bg: #5e2a84;
+    --bs-btn-hover-border-color: #5e2a84;
+    --bs-btn-active-bg: #5e2a84;
+    --bs-btn-active-border-color: #5e2a84;
 }
 
 /* Override sidebar script original margin */
@@ -203,4 +203,123 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     body.sb-sidenav-toggled #wrapper #page-content-wrapper {
         margin-left: 0;
     }
+}
+
+/* 4. Transisi Sidebar */
+@media (max-width: 767.98px) {
+    #sidebar-wrapper {
+        position: fixed;
+        z-index: 1032;
+    }
+
+    #page-content-wrapper {
+        position: relative;
+    }
+
+    /* Backdrop untuk menutup sidebar */
+    .sidebar-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1031;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.25s ease-out, visibility 0.25s ease-out;
+    }
+
+    body.sb-sidenav-toggled .sidebar-backdrop {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+// table style
+
+.table {
+    --bs-table-striped-bg: var(--tumas-bg);
+    --bs-table-hover-bg: #e9ecef;
+}
+.table thead {
+    background-color: #eef2f7;
+    th {
+        font-weight: 600;
+        color: #555;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+    }
+}
+.table td,
+.table th {
+    vertical-align: middle;
+    padding: 1rem;
+}
+
+/* Tombol Profil yang Lebih Baik */
+.profile-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 1.5rem;
+}
+
+/* Menghilangkan padding card-body jika isinya table-responsive */
+.card-body-table {
+    padding: 0 !important;
+}
+
+/* Page Header */
+.page-header {
+    margin-bottom: 2rem;
+}
+.page-header .page-title {
+    font-weight: 700;
+    color: var(--bs-gray-900);
+    margin-bottom: 0.25rem;
+}
+.page-header .page-subtitle {
+    color: var(--bs-gray-600);
+    margin-bottom: 0;
+}
+
+/* Pagination Kustom */
+.pagination {
+    margin-bottom: 0;
+}
+.pagination .page-link {
+    border: none;
+    background-color: #fff;
+    margin: 0 3px;
+    border-radius: 0.375rem;
+    min-width: 38px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease-in-out;
+}
+.pagination .page-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--bs-light);
+}
+.pagination .page-item.active .page-link {
+    background-color: var(--tumas-primary-color);
+    color: white;
+    box-shadow: 0 4px 10px rgba(var(--bs-primary-rgb), 0.3);
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: var(--bs-gray-200);
+    box-shadow: none;
+    color: var(--bs-gray-500);
+}
+
+/* Header Halaman (opsional, jika ingin style tambahan) */
+.page-header.text-center .page-subtitle {
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
 }

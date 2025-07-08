@@ -32,7 +32,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="remember" id="remember"
                         {{ old('remember') ? 'checked' : '' }}>
-                    <label class="form-check-label" for="remember">{{ __('Remember Me') }}</label>
+                    <label class="form-check-label" for="remember">{{ __('Ingat Saya') }}</label>
                 </div>
                 @if (Route::has('password.request'))
                     <a class="btn btn-link p-0" href="{{ route('password.request') }}">{{ __('Lupa password?') }}</a>

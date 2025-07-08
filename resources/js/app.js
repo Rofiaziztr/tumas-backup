@@ -1,30 +1,35 @@
 import "./bootstrap";
 
-/*!
- * Start Bootstrap - Simple Sidebar v6.0.6 (https://startbootstrap.com/template/simple-sidebar)
- * Copyright 2013-2023 Start Bootstrap
- * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-simple-sidebar/blob/master/LICENSE)
- */
-//
-// Scripts
-//
+window.addEventListener("DOMContentLoaded", () => {
+    // Cek apakah elemen sidebar ada
+    const sidebarWrapper = document.getElementById("sidebar-wrapper");
+    if (!sidebarWrapper) return;
 
-window.addEventListener("DOMContentLoaded", (event) => {
+    // Buat elemen backdrop
+    const backdrop = document.createElement("div");
+    backdrop.className = "sidebar-backdrop";
+    document.body.appendChild(backdrop);
+
     // Toggle the side navigation
     const sidebarToggle = document.body.querySelector("#sidebarToggle");
     if (sidebarToggle) {
-        // Baris ini penting jika Anda ingin status sidebar (terbuka/tertutup)
-        // tersimpan bahkan setelah halaman di-refresh.
-        if (localStorage.getItem("sb|sidebar-toggle") === "true") {
-            document.body.classList.toggle("sb-sidenav-toggled");
+        // Hapus status dari localStorage saat halaman dimuat agar tidak "berkedip"
+        // Kita biarkan defaultnya tertutup di mobile
+        if (window.innerWidth < 768) {
+            document.body.classList.remove("sb-sidenav-toggled");
         }
-        sidebarToggle.addEventListener("click", (event) => {
-            event.preventDefault();
+
+        const toggleSidebar = (event) => {
+            if (event) event.preventDefault();
             document.body.classList.toggle("sb-sidenav-toggled");
             localStorage.setItem(
                 "sb|sidebar-toggle",
                 document.body.classList.contains("sb-sidenav-toggled")
             );
-        });
+        };
+
+        // Event untuk tombol hamburger dan backdrop
+        sidebarToggle.addEventListener("click", toggleSidebar);
+        backdrop.addEventListener("click", toggleSidebar);
     }
 });
