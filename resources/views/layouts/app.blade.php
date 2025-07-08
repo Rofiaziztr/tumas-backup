@@ -1,64 +1,58 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TUMAS - Manajemen Tugas Mahasiswa</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        .priority-high {
-            background-color: #ffcccc;
-        }
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>TUMAS - @yield('title', 'Manajemen Tugas Mahasiswa')</title>
 
-        .priority-medium {
-            background-color: #ffffcc;
-        }
-
-        .priority-low {
-            background-color: #ccffcc;
-        }
-
-        :root {
-            --footer-height: 300px;
-            /* Sesuaikan tinggi footer */
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .container {
-            flex: 1;
-        }
-
-        footer {
-            flex-shrink: 0;
-        }
-    </style>
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @stack('styles')
 </head>
 
 <body>
-    @include('partials.navbar')
-    <div class="container py-4">
-        @yield('content')
+    <div class="d-flex" id="wrapper">
+        @auth
+            @include('partials.sidebar')
+        @endauth
+
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    @auth
+                        <button class="btn" id="sidebarToggle"><i class="bi bi-list fs-4"></i></button>
+                    @endauth
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                            @auth
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{{ route('profile') }}">Profil Saya</a>
+                                        <form action="{{ route('logout') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item text-danger">Logout</button>
+                                        </form>
+                                    </div>
+                                </li>
+                            @endauth
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="py-4">
+                <div class="container-fluid">
+                    @yield('content')
+                </div>
+            </main>
+        </div>
     </div>
-    @include('partials.footer')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Script untuk konfirmasi penghapusan
-        document.querySelectorAll('.delete-form').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                if (!confirm('Apakah Anda yakin ingin menghapus tugas ini?')) {
-                    e.preventDefault();
-                }
-            });
-        });
-    </script>
+
     @stack('scripts')
 </body>
 
