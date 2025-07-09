@@ -8,6 +8,16 @@
     <title>TUMAS - @yield('title', 'Manajemen Tugas Mahasiswa')</title>
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <style>
+        body {
+            transition: margin-left .25s ease-out;
+        }
+    </style>
+
     @stack('styles')
 </head>
 
