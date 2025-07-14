@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
+<<<<<<< HEAD
 @section('title', 'Detail Tugas')
+=======
+@section('content')
+    @include('partials.page-header', [
+        'title' => 'Tambah Tugas Baru',
+        'subtitle' => 'Isi detail tugas Anda di bawah ini.',
+    ])
+
+>>>>>>> 00ebd00b80177db8a8a0e18f671af4a9400545ee
 
 @section('content')
     {{-- Menggunakan partials page-header untuk judul halaman --}}
@@ -116,6 +125,16 @@
                             @endif
 
                         </div>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning">Edit</a>
+                        <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('Hapus tugas?')">Hapus</button>
+                        </form>
+                        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Kembali</a>
                     </div>
                 </div>
             </div>

@@ -75,8 +75,12 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Aksi Tugas">
+<<<<<<< HEAD
                                         <a href="{{ route('tasks.edit', $task->id) }}"
                                             class="btn btn-sm btn-warning mx-1">
+=======
+                                        <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-warning">
+>>>>>>> 00ebd00b80177db8a8a0e18f671af4a9400545ee
                                             <i class="bi bi-pencil"></i> <span class="d-none d-md-inline">Edit</span>
                                         </a>
                                         <form action="{{ route('tasks.destroy', $task->id) }}" method="POST"
@@ -101,16 +105,26 @@
     @if ($tasks instanceof \Illuminate\Pagination\LengthAwarePaginator && $tasks->hasPages())
         <div class="card-footer bg-transparent pt-3 pb-3">
             <div class="d-flex justify-content-between align-items-center">
+<<<<<<< HEAD
+=======
+                <div>
+                    {!! $tasks->withQueryString()->links('vendor.pagination.custom') !!}
+                </div>
+
+>>>>>>> 00ebd00b80177db8a8a0e18f671af4a9400545ee
                 <div class="text-muted">
                     <small>
                         Showing {{ $tasks->firstItem() }} to {{ $tasks->lastItem() }} of {{ $tasks->total() }}
                         results
                     </small>
                 </div>
+<<<<<<< HEAD
 
                 <div>
                     {!! $tasks->withQueryString()->links('vendor.pagination.custom') !!}
                 </div>
+=======
+>>>>>>> 00ebd00b80177db8a8a0e18f671af4a9400545ee
             </div>
         </div>
     @endif
