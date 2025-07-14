@@ -1,20 +1,9 @@
-<<<<<<< HEAD
 // 1. Import Google Fonts
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 // 2. Import Bootstrap SCSS
 @import "bootstrap/scss/bootstrap";
 
-=======
-// resources/sass/app.scss (INI FILE YANG BENAR)
-
-// 1. Import Google Fonts
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
-
-// 2. Import Bootstrap SCSS
-@import "bootstrap/scss/bootstrap";
-
->>>>>>> 00ebd00b80177db8a8a0e18f671af4a9400545ee
 // 3. Import Bootstrap Icons CSS
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
@@ -92,6 +81,7 @@ body {
     background-color: var(--tumas-sidebar-active-bg);
     color: var(--tumas-sidebar-text-hover);
     opacity: 1;
+}
 
 #sidebar-wrapper .list-group-item.active {
     background-color: var(--tumas-sidebar-active-bg);
@@ -212,11 +202,7 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     }
 }
 
-<<<<<<< HEAD
 /* Transisi Sidebar */
-=======
-/* 4. Transisi Sidebar */
->>>>>>> 00ebd00b80177db8a8a0e18f671af4a9400545ee
 @media (max-width: 767.98px) {
     #sidebar-wrapper {
         position: fixed;
@@ -278,7 +264,6 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     margin-top: 1.5rem;
 }
 
-<<<<<<< HEAD
 // Dropdown Profil ---
 .dropdown-menu {
     --bs-dropdown-padding-y: 0; // Hapus padding vertikal dari container
@@ -290,8 +275,6 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     padding-bottom: 0.5rem; // agar area hover/klik menjadi penuh
 }
 
-=======
->>>>>>> 00ebd00b80177db8a8a0e18f671af4a9400545ee
 /* Menghilangkan padding card-body jika isinya table-responsive */
 .card-body-table {
     padding: 0 !important;
@@ -348,7 +331,6 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     margin-left: auto;
     margin-right: auto;
 }
-<<<<<<< HEAD
 
 // link colour
 a {
@@ -361,5 +343,3 @@ a:hover {
     text-decoration: none;
     cursor: pointer;
 }
-=======
->>>>>>> 00ebd00b80177db8a8a0e18f671af4a9400545ee
