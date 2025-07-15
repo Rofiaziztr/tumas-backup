@@ -15,44 +15,41 @@ class SendDeadlineReminders extends Command
 
     public function handle()
     {
-        $this->info('Mulai mengirim pengingat deadline...');
+        $this->info('Mulai memeriksa dan mengirim pengingat deadline...');
 
         // Ambil semua user yang punya preferensi reminder
         $users = User::whereNotNull('reminder_days_before')->get();
 
         foreach ($users as $user) {
-            $daysBefore = $user->reminder_days_before;
+            $reminderDays = $user->reminder_days_before;
 
-            // Cari tugas user yg belum selesai & deadline-nya berada dalam rentang preferensi user
+            // Batas waktu paling jauh untuk pengingat
+            $reminderCutoff = now()->addDays($reminderDays);
+
+            // Ambil SEMUA tugas (baik yang sudah terlambat maupun yang mendekati deadline)
+            // dalam satu query. Logikanya:
+            // - Belum selesai
+            // - Deadline-nya adalah SEBELUM batas waktu pengingat
             $tasksToRemind = Task::where('user_id', $user->id)
                 ->where('status', '!=', 'completed')
-                // Logika: deadline harus di antara sekarang dan `daysBefore` dari sekarang
-                ->whereBetween('deadline', [Carbon::now(), Carbon::now()->addDays($daysBefore)])
+                ->where('deadline', '<=', $reminderCutoff)
                 ->get();
-            
-            // Logika tambahan untuk tugas yang terlambat (tetap dikirim notifikasi)
-            $overdueTasks = Task::where('user_id', $user->id)
-                ->where('status', '!=', 'completed')
-                ->whereDate('deadline', '<', Carbon::today()) // Cek yang sudah lewat hari
-                ->get();
-            
-            $allTasks = $tasksToRemind->merge($overdueTasks)->unique('id');
 
-
-            if ($allTasks->isEmpty()) {
+            if ($tasksToRemind->isEmpty()) {
                 $this->line("Tidak ada tugas untuk diingatkan kepada {$user->email}.");
                 continue;
             }
 
-            $this->info("Mengirim {$allTasks->count()} notifikasi ke: {$user->email}");
-            foreach ($allTasks as $task) {
-                // Kirim notifikasi untuk setiap tugas
-                // (Laravel cukup pintar untuk tidak mengirim notifikasi yang sama berulang kali jika sudah ada)
+            $this->info("Menyiapkan {$tasksToRemind->count()} notifikasi untuk: {$user->email}");
+
+            foreach ($tasksToRemind as $task) {
+                // Kirim notifikasi untuk setiap tugas.
+                // Laravel akan memasukkannya ke dalam antrian.
                 $user->notify(new DeadlineReminder($task));
             }
         }
 
-        $this->info('Semua notifikasi pengingat berhasil diproses.');
+        $this->info('Semua notifikasi pengingat berhasil dimasukkan ke dalam antrian.');
         return 0;
     }
 }

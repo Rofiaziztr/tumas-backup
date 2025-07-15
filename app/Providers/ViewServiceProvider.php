@@ -12,30 +12,33 @@ class ViewServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        View::composer('partials.navbar', function ($view) {
+        // FIX: Mengirim data ke sidebar, bukan hanya navbar
+        View::composer('partials.sidebar', function ($view) {
             if (Auth::check() && Schema::hasTable('tasks')) {
                 $user = Auth::user();
+                // FIX: Ambil preferensi user untuk perhitungan yang akurat
+                $reminderDays = $user->reminder_days_before ?? 3;
 
-                // Ambil 5 notifikasi terbaru yang belum dibaca
-                $notifications = $user->unreadNotifications()->take(5)->get();
-
-                // Hitung jumlah reminder (terlambat + mendekati deadline)
+                // Hitung jumlah tugas TERLAMBAT
                 $overdueCount = Task::where('user_id', $user->id)
-                    ->where('deadline', '<', now())
+                    ->where('deadline', '<', now()) // Gunakan timezone aplikasi
                     ->where('status', '!=', 'completed')
                     ->count();
 
+                // FIX: Hitung jumlah tugas MENDEKATI DEADLINE menggunakan preferensi user
                 $nearingCount = Task::where('user_id', $user->id)
-                    ->whereBetween('deadline', [now(), now()->addDays(3)])
                     ->where('status', '!=', 'completed')
+                    ->whereBetween('deadline', [now(), now()->addDays($reminderDays)])
                     ->count();
 
                 $reminderCount = $overdueCount + $nearingCount;
 
                 $view->with([
-                    'globalNotifications' => $notifications,
                     'globalReminderCount' => $reminderCount,
                 ]);
+            } else {
+                // Pastikan variabel ada meski user tidak login untuk menghindari error
+                $view->with('globalReminderCount', 0);
             }
         });
     }

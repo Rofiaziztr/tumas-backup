@@ -101,6 +101,25 @@ class TaskController extends Controller
         return redirect()->route('dashboard')->with('success', 'Tugas berhasil dihapus!');
     }
 
+    /**
+     * Menandai tugas sebagai selesai.
+     */
+    public function complete(Task $task)
+    {
+        // Pastikan tugas milik user yang login
+        if ($task->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // Update status menjadi 'completed'
+        $task->status = 'completed';
+        $task->save();
+
+        // FIX: Redirect ke dashboard, bukan kembali ke halaman sebelumnya.
+        // Ini memastikan tombol "Kembali" di halaman lain berfungsi dengan benar.
+        return redirect()->route('dashboard')->with('success', 'Tugas "' . $task->title . '" telah ditandai selesai!');
+    }
+
     public function showReminders()
     {
         $user = Auth::user(); // Ambil data user yang sedang login
@@ -115,29 +134,33 @@ class TaskController extends Controller
             'nearingDeadlineTasks' => $nearingDeadlineTasks,
             'overdueTasks' => $overdueTasks,
             'reminderCount' => $reminderCount,
-            'reminderDays' => $user->reminder_days_before
+            'reminderDays' => $user->reminder_days_before ?? 3
         ]);
     }
 
     private function getOverdueTasks($paginate = false)
     {
-        // 1. Bangun query-nya dulu, jangan langsung di-return
+        // 1. Bangun query untuk tugas terlambat, gunakan timezone aplikasi
         $query = Task::where('user_id', Auth::id())
-            ->where('deadline', '<', now()->utc())
+            ->where('deadline', '<', now()) // FIX: Menggunakan now() sesuai timezone app
             ->where('status', '!=', 'completed')
             ->orderBy('deadline');
 
-        // 2. Sekarang baru eksekusi query sesuai kondisi
+        // 2. Eksekusi query
         return $paginate ? $query->paginate(10, ['*'], 'overdue_page') : $query->get();
     }
 
     private function getNearingDeadlineTasks($paginate = false)
     {
-        // 1. Bangun query-nya dulu
-        $query = Task::where('user_id', Auth::id())
-            ->where('deadline', '>=', now()->utc())
-            ->where('deadline', '<=', now()->utc()->addDays(3))
+        $user = Auth::user();
+        // Ambil preferensi user, jika tidak ada, default ke 3 hari
+        $reminderDays = $user->reminder_days_before ?? 3;
+
+        // 1. Bangun query untuk tugas mendekati deadline
+        $query = Task::where('user_id', $user->id)
             ->where('status', '!=', 'completed')
+            // FIX: Gunakan whereBetween, preferensi user, dan timezone app
+            ->whereBetween('deadline', [now(), now()->addDays($reminderDays)])
             ->orderBy('deadline');
 
         // 2. Eksekusi query

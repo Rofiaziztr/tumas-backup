@@ -14,6 +14,9 @@ Auth::routes(['verify' => false]);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [TaskController::class, 'index'])->name('dashboard');
+
+    Route::patch('/tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete');
+
     Route::resource('tasks', TaskController::class)->only([
         'create',
         'store',

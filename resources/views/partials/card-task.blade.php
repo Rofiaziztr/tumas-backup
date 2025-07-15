@@ -75,10 +75,27 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Aksi Tugas">
+                                        {{-- Tombol Selesaikan --}}
+                                        @if ($task->status != 'completed')
+                                            <form action="{{ route('tasks.complete', $task->id) }}" method="POST"
+                                                onsubmit="return confirm('Tandai tugas ini sebagai selesai?')">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-sm btn-success me-1"
+                                                    title="Tandai Selesai">
+                                                    <i class="bi bi-check-lg"></i> <span
+                                                        class="d-none d-md-inline">Selesai</span>
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                        {{-- Tombol Edit --}}
                                         <a href="{{ route('tasks.edit', $task->id) }}"
-                                            class="btn btn-sm btn-warning mx-1">
+                                            class="btn btn-sm btn-warning me-1">
                                             <i class="bi bi-pencil"></i> <span class="d-none d-md-inline">Edit</span>
                                         </a>
+
+                                        {{-- Tombol Hapus --}}
                                         <form action="{{ route('tasks.destroy', $task->id) }}" method="POST"
                                             onsubmit="return confirm('Apakah Anda yakin ingin menghapus tugas ini?')">
                                             @csrf

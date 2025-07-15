@@ -3,7 +3,8 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "concurrently \"php artisan serve\" \"npm run dev:vite\"",
+        "dev:vite": "vite"
     },
     "devDependencies": {
         "@popperjs/core": "^2.11.6",

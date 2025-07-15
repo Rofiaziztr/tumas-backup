@@ -21,8 +21,8 @@ class DeadlineReminder extends Notification implements ShouldQueue // Implementa
     }
 
     /**
-     * Tentukan channel pengiriman notifikasi.
-     * Sekarang kita tambahkan 'mail' untuk pengiriman via email.
+     * menentukan channel pengiriman notifikasi.
+     * 'mail' untuk pengiriman via email.
      */
     public function via(object $notifiable): array
     {
